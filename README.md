@@ -1,2 +1,10 @@
 # Score-matching-for-unnormalized-density-estimation
-A practical attempt to implement density estimation for unnormalized gaussian distribution using score matching
+A practical attempt to implement density estimation for unnormalized gaussian mixture distribution using score matching from scratch
+
+Reference: 
+1. Hyvärinen, Aapo, and Peter Dayan. "Estimation of non-normalized statistical models by score matching." Journal of Machine Learning Research 6.4 (2005).
+2. Song, Yang, and Stefano Ermon. "Generative modeling by estimating gradients of the data distribution." Advances in Neural Information Processing Systems 32 (2019).
+
+According to Hyvärinen's Score matching rule, based on the loss equation given in the literarure, I try to build a shallow feed-forward neural networks to fit the gradients of observed data directly from its dataset. In this approach, we can avoid to calculate the normalizing constant of density, which is hard and computatuonal-expensive to obtain. After we get the trained gradients of observed data, next I used Langevin dynamics (MALA) to sample directly from our estimated gradients. But this may lead to a problem that: It's difficult to estimate the ground truth gradient of area with low density. So I employ the techniques propose by Yang Song (2019) to improve the estimation by Noise Scales. More precisely, we add perturbation to our data and set up different scale values, then we sampled using Anealed Langevin by different scales and mix them together. Also, Yang Song (2019) proposed a joint loss function using to train perturbed dataset under different scales value, I also implemented this in the notebook.
+
+Also, I try score-based models on the semi-continuous data because this type data is very special because it usually has much more zero values and widely seen in Insurance models. Score-based models cannot perform well on this type of data because it's hard to approximate the gradients around 0 and right limit. I think this is beacause the distribution is not continuous and isn't differentiable at 0. So I think it's valuable to investigate a score method to perform well on the non-differantiable unnormalized density in the future. That is cool!
